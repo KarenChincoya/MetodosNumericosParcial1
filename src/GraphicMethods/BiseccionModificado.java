@@ -9,7 +9,7 @@ package GraphicMethods;
  *
  * @author karen
  */
-public class BiseccionMejorada {
+public class BiseccionModificado {
     private double xl;
     private double xu;
     private double es; //Tolerancia o nivel aceptable. Es = (0.5*10^(2-n)) 100%
@@ -17,7 +17,7 @@ public class BiseccionMejorada {
     private double cifrasSig;
     /* es = tolerancia*/
 
-    public BiseccionMejorada(double xl, double xu, double cifrasSig){
+    public BiseccionModificado(double xl, double xu, double cifrasSig){
         this.xl = xl;
         this.xu = xu;
         this.es = 0.5 * Math.pow(10.0, 2.0 - cifrasSig);   
@@ -80,7 +80,7 @@ public class BiseccionMejorada {
         double xu3 = 1.3;
         double ea3 = 0.01;        
         
-        BiseccionMejorada biseccion = new BiseccionMejorada(xl3, xu3, 0); /*criterio de paro 3 cifras*/
+        BiseccionModificado biseccion = new BiseccionModificado(xl3, xu3, 0); /*criterio de paro 3 cifras*/
         biseccion.setEs(ea3);
         biseccion.setIteraciones();
         System.out.println("Iteraciones máximas = "+biseccion.getIteraciones());
