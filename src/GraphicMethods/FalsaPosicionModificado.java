@@ -13,7 +13,6 @@ public class FalsaPosicionModificado {
     private double xl;
     private double xu;
     private double es;
-    private int imax;
     
     public FalsaPosicionModificado(double xl, double xu, double cifrasSig) {
        this.xl = xl;
@@ -27,18 +26,12 @@ public class FalsaPosicionModificado {
 //        return Math.pow(x, 2.0)+(1.0/x)-6.0;        
         return Math.pow(x,10)-1;
     }
-    private double getXr(double xl, double xu){
-        double fl = this.evaluar(xl);
-        double fu = this.evaluar(xu);
-        return (xu-fu*(xl-xu))/(fl-fu);
+    private double getXr(double xl, double xu, double fl, double fu){
+        return xu-fu*(xl-xu)/(fl-fu);
     }  
-    public void setMaximoIteraciones(){
-        double diferencia = this.xu - this.xl;        
-        this.imax = (int) (Math.log(diferencia/this.es)/(Math.log(2)));
-    }
     public void ejecutarAlgoritmo(){
        double xr;
-       double ea = 0; //error relativo porcentual aproximado
+       double ea = 0.0; //error relativo porcentual aproximado
        double xrold = 0.0;
        double producto;
        int iteracion=0;
@@ -48,42 +41,71 @@ public class FalsaPosicionModificado {
        double fu = 0.0;
        int iu = 0;
        int il = 0;
-       
+       int contL = 0;
+       int contU = 0;
+       double xlold;
+       double xuold;
+      
+       fl = this.evaluar(xl);
+       fu = this.evaluar(xu);
+
+        xr = this.getXr(xl, xu, fl, fu);
+
        do{
-          xr = this.getXr(xl, xu);
           xrold = xr;
-          fl = this.evaluar(xl);
-          fr = this.evaluar(xr);                    
+          xr = this.getXr(xl, xu, fl, fu);
+          fr = this.evaluar(xr);
+          
+          System.out.println("xr = "+xr);
           if(xr!=0.0){
               ea = ((xr-xrold)/xr)*100.0;
-          }
-          producto = fl*fr;          
+              ea = Math.abs(ea);
+              System.out.println("ea abs = "+ea);
+          }    
           
+          producto = fl*fr;          
+           System.out.println("producto = "+producto);
           if(producto<0.0){
             xu = xr;
             fu = this.evaluar(xu);
+            //contar si algun limite se esta estancando
             iu = 0;
-            il = il++;
+            il++;
+            System.out.println("\n\n **************************** il  = "+il+"\n\n");            
+            System.out.println("\t\t\t\t ********* f(fl) = "+fl);
             if(il>=2){
+                System.out.println("\t\t\t\t *********entra a resetear il");
                 fl = fl/2;
+                System.out.println("\t\t\t\t ********* f(xl) = "+fl);
+                il = 0;
             }
           }else if(producto>0.0){
             xl = xr;
             fl = this.evaluar(xl);
             il = 0;
-            iu = iu++;
+            iu++;
+            
+            System.out.println("\n\n **************************** iu  = "+iu+"\n\n");            
+            System.out.println("\t\t\t\t ********* f(xu) = "+fu);
             if(iu>=2){
+                System.out.println("\t\t\t\t *********entra a resetear iu");
                 fu = fu/2;
-            }else {
-              ea = 0;
+                System.out.println("\t\t\t\t ********* f(xu) = "+fu);
+                iu = 0;
             }
+          }else {
+              ea = 0;
           }
           
-          if(ea<es){//|| iteracion>=imax
-              avanzar = false;
+          if(iteracion!=0){
+              if(ea<es){//|| iteracion>=imax
+                 avanzar = false;
+              }              
           }
           
-          iteracion++;
+          //si esta estancado, sal
+          System.out.println("Iteración: "+iteracion+"; Producto: "+producto+" ; xr = "+xr+" ; ea = "+ea);
+          iteracion++;          
        }while(avanzar==true);
           
         System.out.println("*********************************\n");

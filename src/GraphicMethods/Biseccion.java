@@ -24,7 +24,9 @@ public class Biseccion {
         this.es = es;
     }
     private double evaluar(double x){
-        return Math.pow(x,10)-1;
+// return Math.pow(x, 2)+(1/x)-6;
+// return Math.pow(x,10)-1;
+        return Math.pow(x, 4)-8*Math.pow(x, 3)-35*Math.pow(x,2)+450*x-1001;
     }
     
     public double ejecutarAlgoritmo(){
@@ -85,11 +87,11 @@ public class Biseccion {
     }
     public static void main(String[] args) {
         double xl3 = 0;
-        double xu3 = 1.3;
+        double xu3 = 10;
         double ea3 = 0.01;        
         
-        Biseccion biseccion = new Biseccion(xl3, xu3, 0); /*criterio de paro 3 cifras*/
-        biseccion.setEs(ea3);
+        Biseccion biseccion = new Biseccion(xl3, xu3, 3); /*criterio de paro 3 cifras*/
+//        biseccion.setEs(ea3);
         long time = System.nanoTime();
         biseccion.ejecutarAlgoritmo();
         long time2 = System.nanoTime();
